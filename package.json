@@ -1,0 +1,28 @@
+{
+  "name": "toy-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chkaos/build-your-own-react.git"
+  },
+  "author": "chkaos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chkaos/build-your-own-react/issues"
+  },
+  "homepage": "https://github.com/chkaos/build-your-own-react#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-transform-react-jsx": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.1.0",
+    "webpack": "^5.3.2",
+    "webpack-cli": "^4.1.0"
+  }
+}
