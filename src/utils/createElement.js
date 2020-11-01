@@ -16,7 +16,28 @@ class TextWrapper {
   }
 }
 
-const createElement = function (type, attributres, ...children) {
+export class ReactComponent {
+  constructor() {
+    this.props = Object.create(null)
+    this.children = []
+    this._root = null
+  }
+  setAttribute(name, value) {
+    this.props[name] = value
+  }
+  appendChild(component) {
+    this.children.push(component)
+  }
+  get root() {
+    if(!this._root) {
+      console.log(this.render())
+      this._root = this.render().root
+    }
+    return this._root
+  } 
+}
+
+export const createElement = function (type, attributres, ...children) {
 
   let element 
 
@@ -30,22 +51,34 @@ const createElement = function (type, attributres, ...children) {
     element.setAttribute(p, attributres[p])
   }
 
-  let insertChildren = (children) => {
-    for(let child in children) {
-      if(typeof child === "string"){
-        child = new TextWrapper(type)
-      }
-      if(Array.isArray(child)){
+  // let insertChildren = (children) => {
+  //   for(let child in children) {
+  //     if(typeof child === "string"){
+  //       child = new TextWrapper(type)
+  //     }
+  //     if(Array.isArray(child)){
+  //       insertChildren(child)
+  //     } else {
+  //       element.appendChild(child)
+  //     }
+  //   }
+  // }
+
+  let insertChildren = children => {
+    for (let child of children) {
+      if (typeof child === 'object' && child instanceof Array) {
         insertChildren(child)
       } else {
+        if (!(child instanceof ReactComponent) && !(child instanceof ElementWrapper) && !(child instanceof TextWrapper))
+          child = child.toString()
+        if (typeof child === 'string')
+          child = new TextWrapper(child)
         element.appendChild(child)
       }
-    }
+    }  
   }
 
   insertChildren(children)
 
   return element
 }
-
-export default createElement

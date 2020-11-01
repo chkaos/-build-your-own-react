@@ -2,7 +2,10 @@ import { createElement, render, ReactComponent } from "./src/creact"
 
 class MyComponent extends ReactComponent{
   render() {
-    return <div>MyComponent</div>
+    return <div>
+      <h1>MyComponent</h1>
+      {this.children}
+    </div>
   }
 }
 
