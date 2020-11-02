@@ -1,3 +1,4 @@
+import { RENDER_TO_DOM } from "./type"
 class ElementWrapper {
   constructor(type) {
     this.root = document.createElement(type)
@@ -6,13 +7,25 @@ class ElementWrapper {
     this.root.setAttribute(name, value)
   }
   appendChild(component) {
-    this.root.appendChild(component.root)
+    let range = document.createRange()
+    range.setStart(this.root, this.root.childNodes.length)
+    range.setEnd(this.root, this.root.childNodes.length)
+    component[RENDER_TO_DOM](range)
+    // this.root.appendChild(component.root)
+  }
+  [RENDER_TO_DOM](range) {
+    range.deleteContents()
+    range.insertNode(this.root)
   }
 }
 
 class TextWrapper {
   constructor(type) {
     this.root = document.createTextNode(type)
+  }
+  [RENDER_TO_DOM](range) {
+    range.deleteContents()
+    range.insertNode(this.root)
   }
 }
 
@@ -28,13 +41,9 @@ export class ReactComponent {
   appendChild(component) {
     this.children.push(component)
   }
-  get root() {
-    if(!this._root) {
-      console.log(this.render())
-      this._root = this.render().root
-    }
-    return this._root
-  } 
+  [RENDER_TO_DOM](range) {
+    this.render()[RENDER_TO_DOM](range)
+  }
 }
 
 export const createElement = function (type, attributres, ...children) {
