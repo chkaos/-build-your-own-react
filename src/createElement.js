@@ -1,4 +1,6 @@
 import { RENDER_TO_DOM } from "./type"
+import { isObject } from "./utils"
+
 class ElementWrapper {
   constructor(type) {
     this.root = document.createElement(type)
@@ -53,6 +55,26 @@ export class ReactComponent {
   rerender(){
     this._range.deleteContents()
     this[RENDER_TO_DOM](this._range)
+  }
+  setState(newState){
+    if(!isObject(this.state)) {
+      this.state = newState
+      this.rerender()
+      return
+    }
+    let merge = (oldState, newState) => {
+      for(let p in newState) {
+        if(!isObject(oldState[p])){
+          oldState[p] = newState[p]
+        } else {
+          merge(oldState[p] , newState[p])
+        }
+      }
+    }
+
+    merge(this.state, newState)
+
+    this.rerender()
   }
 }
 

@@ -1,5 +1,5 @@
-import { createElement, ReactComponent } from "./utils/createElement"
-import render from "./utils/render"
+import { createElement, ReactComponent } from "./createElement"
+import render from "./render"
 
 export {
   createElement,
