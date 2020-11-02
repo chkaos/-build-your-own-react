@@ -4,6 +4,10 @@ class ElementWrapper {
     this.root = document.createElement(type)
   }
   setAttribute(name, value) {
+    if (name.match(/^on([\s\S]+)$/)) {
+      this.root.addEventListener(RegExp.$1.replace(/^[\s\S]/, c=>c.toLowerCase()), value)
+      return
+    }
     this.root.setAttribute(name, value)
   }
   appendChild(component) {
@@ -34,6 +38,7 @@ export class ReactComponent {
     this.props = Object.create(null)
     this.children = []
     this._root = null
+    this._range = null
   }
   setAttribute(name, value) {
     this.props[name] = value
@@ -42,7 +47,12 @@ export class ReactComponent {
     this.children.push(component)
   }
   [RENDER_TO_DOM](range) {
+    this._range = range
     this.render()[RENDER_TO_DOM](range)
+  }
+  rerender(){
+    this._range.deleteContents()
+    this[RENDER_TO_DOM](this._range)
   }
 }
 

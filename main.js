@@ -11,6 +11,7 @@ class MyComponent extends ReactComponent{
   render() {
     return <div>
       <h1>MyComponent</h1>
+      <button onclick={()=>{this.state.a++; this.rerender()}}>增加</button>
       <span>{this.state.a.toString()}</span>
       <div>{this.state.b.toString()}</div>
       {this.children}
