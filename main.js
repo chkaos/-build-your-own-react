@@ -1,26 +1,81 @@
-import { createElement, render, ReactComponent } from "./src/creact"
+import { createElement, render, Component } from "./src/creact"
 
-class MyComponent extends ReactComponent{
-  constructor(){
-    super()
+class Square extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      a: 1,
-      b: 2
-    }
+      value: null,
+    };
   }
+
   render() {
-    return <div>
-      <h1>MyComponent</h1>
-      <button onclick={()=>{this.setState({a: this.state.a + 1})}}>增加</button>
-      <span>{this.state.a.toString()}</span>
-      <div>{this.state.b.toString()}</div>
-      {this.children}
-    </div>
+    return (
+      <button
+        className="square"
+        onClick={() => this.setState({value: 'X'})}
+      >
+        {this.state.value}
+      </button>
+    );
   }
 }
 
-render(<MyComponent id="test">
-  <div>123</div>
-  <div>abc</div>
-  <div>456</div>
-</MyComponent>, document.body)
+class Board extends Component {
+  constructor(){
+    super()
+  }
+  renderSquare(i) {
+    return <Square />;
+  }
+
+  render() {
+    const status = 'Next player: X';
+
+    return (
+      <div>
+        <div className="status">{status}</div>
+        <div className="board-row">
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
+        </div>
+      </div>
+    );
+  }
+}
+
+class Game extends Component {
+  constructor(){
+    super()
+  }
+  render() {
+    return (
+      <div className="game">
+        <div className="game-board">
+          <Board />
+        </div>
+        <div className="game-info">
+          <div>{/* status */}</div>
+          <ol>{/* TODO */}</ol>
+        </div>
+      </div>
+    );
+  }
+}
+
+// ========================================
+
+render(
+  <Game />,
+  document.getElementById('root')
+);

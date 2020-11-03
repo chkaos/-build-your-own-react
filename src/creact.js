@@ -1,8 +1,8 @@
-import { createElement, ReactComponent } from "./createElement"
+import { createElement, Component } from "./createElement"
 import render from "./render"
 
 export {
   createElement,
   render,
-  ReactComponent
+  Component
 }

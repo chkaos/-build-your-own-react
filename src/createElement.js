@@ -10,7 +10,12 @@ class ElementWrapper {
       this.root.addEventListener(RegExp.$1.replace(/^[\s\S]/, c=>c.toLowerCase()), value)
       return
     }
-    this.root.setAttribute(name, value)
+    if(name === "className") {
+      this.root.setAttribute("class", value)
+    } else {
+      this.root.setAttribute(name, value)
+    }
+    
   }
   appendChild(component) {
     let range = document.createRange()
@@ -35,7 +40,7 @@ class TextWrapper {
   }
 }
 
-export class ReactComponent {
+export class Component {
   constructor() {
     this.props = Object.create(null)
     this.children = []
@@ -53,8 +58,14 @@ export class ReactComponent {
     this.render()[RENDER_TO_DOM](range)
   }
   rerender(){
-    this._range.deleteContents()
-    this[RENDER_TO_DOM](this._range)
+    let oldRange = this._range
+    let range = document.createRange()
+    range.setStart(oldRange.startContainer, oldRange.startOffset)
+    range.setEnd(oldRange.startContainer, oldRange.startOffset)
+    this[RENDER_TO_DOM](range)
+
+    oldRange.setStart(range.endContainer, range.endOffset)
+    oldRange.deleteContents()
   }
   setState(newState){
     if(!isObject(this.state)) {
@@ -92,25 +103,12 @@ export const createElement = function (type, attributres, ...children) {
     element.setAttribute(p, attributres[p])
   }
 
-  // let insertChildren = (children) => {
-  //   for(let child in children) {
-  //     if(typeof child === "string"){
-  //       child = new TextWrapper(type)
-  //     }
-  //     if(Array.isArray(child)){
-  //       insertChildren(child)
-  //     } else {
-  //       element.appendChild(child)
-  //     }
-  //   }
-  // }
-
   let insertChildren = children => {
     for (let child of children) {
       if (typeof child === 'object' && child instanceof Array) {
         insertChildren(child)
       } else {
-        if (!(child instanceof ReactComponent) && !(child instanceof ElementWrapper) && !(child instanceof TextWrapper))
+        if (!(child instanceof Component) && !(child instanceof ElementWrapper) && !(child instanceof TextWrapper))
           child = child.toString()
         if (typeof child === 'string')
           child = new TextWrapper(child)
