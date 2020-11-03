@@ -1,4 +1,4 @@
-import { RENDER_TO_DOM } from "./type"
+import { RENDER_TO_DOM } from "./const"
 import { isObject } from "./utils"
 
 class ElementWrapper {
@@ -11,16 +11,17 @@ class ElementWrapper {
       return
     }
     if(name === "className") {
-      this.root.setAttribute("class", value)
-    } else {
-      this.root.setAttribute(name, value)
+      name = "class"
     }
+    
+    this.root.setAttribute(name, value)
     
   }
   appendChild(component) {
     let range = document.createRange()
     range.setStart(this.root, this.root.childNodes.length)
     range.setEnd(this.root, this.root.childNodes.length)
+    console.log("123", component)
     component[RENDER_TO_DOM](range)
     // this.root.appendChild(component.root)
   }
@@ -103,21 +104,24 @@ export const createElement = function (type, attributres, ...children) {
     element.setAttribute(p, attributres[p])
   }
 
-  let insertChildren = children => {
+  console.log(children)
+
+  let insertChildren = (e, children) => {
+    
     for (let child of children) {
-      if (typeof child === 'object' && child instanceof Array) {
-        insertChildren(child)
-      } else {
-        if (!(child instanceof Component) && !(child instanceof ElementWrapper) && !(child instanceof TextWrapper))
-          child = child.toString()
-        if (typeof child === 'string')
-          child = new TextWrapper(child)
-        element.appendChild(child)
+      if (typeof child === 'string') {
+        child = new TextWrapper(child)
       }
-    }  
+  
+      if (child === null) {
+        continue
+      }
+  
+      Array.isArray(child) ? insertChildren(e, child) : e.appendChild(child)
+    }
   }
 
-  insertChildren(children)
+  insertChildren(element, children)
 
   return element
 }

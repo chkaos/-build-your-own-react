@@ -1,6 +1,6 @@
-import { createElement, render, ReactComponent } from "./src/creact"
+import { render, Component } from "./src/react"
 
-class MyComponent extends ReactComponent{
+class MyComponent extends Component{
   constructor(){
     super()
     this.state = {
