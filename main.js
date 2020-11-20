@@ -1,7 +1,7 @@
 import { createElement, render, Component } from "./src/react"
 
 class Square extends Component {
-  render()  {
+  render() {
     return <button className="square" onClick={this.props.onClick}>
       {this.props.value}
     </button>
@@ -79,6 +79,7 @@ class Game extends Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0
     });
+    console.log(this.state)
   }
 
   render() {

@@ -1,0 +1,1 @@
+export const RENDER_TO_DOM: symbol = Symbol("render to dom")
